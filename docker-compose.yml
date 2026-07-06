@@ -1,0 +1,59 @@
+services:
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: shelfmate-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: shelfmate
+      POSTGRES_USER: shelfmate
+      POSTGRES_PASSWORD: shelfmate
+    volumes:
+      - shelfmate-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shelfmate -d shelfmate"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    networks:
+      - shelfmate-net
+    # ports:
+    #   - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: shelfmate-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://shelfmate:shelfmate@db:5432/shelfmate
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - shelfmate-net
+    # ports:
+    #   - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: shelfmate-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    networks:
+      - shelfmate-net
+
+networks:
+  shelfmate-net:
+    driver: bridge
+
+volumes:
+  shelfmate-db-data:
