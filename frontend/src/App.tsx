@@ -40,7 +40,7 @@ export default function App() {
       );
       setRecommendations(recs);
     } catch {
-      setError("Couldn't reach the recommendation service. Is the backend running?");
+      setError("Couldn't reach the backend. Is it running?");
     } finally {
       setLoading(false);
     }
@@ -48,17 +48,13 @@ export default function App() {
 
   return (
     <div className="page">
-      <header className="hero">
-        <p className="hero__eyebrow">A matching service for readers</p>
-        <h1 className="hero__title">Shelfmate</h1>
-        <p className="hero__subtitle">
-          Tell us a few books you've loved. We'll read the room — genres, tone, the
-          company they keep on other people's shelves — and hand you what's next.
-        </p>
+      <header className="header">
+        <h1>Shelfmate</h1>
+        <p>Add a few books you like, get recommendations based on tags and reader ratings.</p>
         <CatalogSearch onSelect={addToShelf} selectedIds={selectedIds} />
       </header>
 
-      <main className="content">
+      <main>
         <Shelf
           books={shelfBooks}
           onRemove={removeFromShelf}
@@ -66,12 +62,12 @@ export default function App() {
           loading={loading}
         />
 
-        {error && <p className="error-banner">{error}</p>}
+        {error && <p className="error">{error}</p>}
 
         {recommendations && (
-          <section className="results">
-            <h2 className="results__title">Picked for your shelf</h2>
-            <div className="book-grid">
+          <section>
+            <h2>Recommended for you</h2>
+            <div className="grid">
               {recommendations.map((book) => (
                 <BookCard key={book.book_id} book={book} />
               ))}
@@ -80,9 +76,9 @@ export default function App() {
         )}
 
         {!recommendations && popular.length > 0 && (
-          <section className="results">
-            <h2 className="results__title">Widely loved, good place to start</h2>
-            <div className="book-grid">
+          <section>
+            <h2>Popular books</h2>
+            <div className="grid">
               {popular.map((book) => (
                 <BookCard
                   key={book.book_id}
@@ -96,11 +92,8 @@ export default function App() {
         )}
       </main>
 
-      <footer className="footer">
-        <p>
-          Built on the goodbooks-10k open dataset · content + collaborative-filtering
-          hybrid matching
-        </p>
+      <footer>
+        <p>data: goodbooks-10k</p>
       </footer>
     </div>
   );

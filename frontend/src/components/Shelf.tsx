@@ -7,50 +7,35 @@ interface Props {
   loading: boolean;
 }
 
-// A small deterministic palette so spines look hand-shelved, not random.
-const SPINE_COLORS = ["#8C5B3E", "#4E6C50", "#8A3B3B", "#3E5A78", "#7A5C8C", "#B08A2E"];
-
-function spineColor(bookId: number): string {
-  return SPINE_COLORS[bookId % SPINE_COLORS.length];
-}
-
 export function Shelf({ books, onRemove, onGetRecommendations, loading }: Props) {
   return (
     <div className="shelf">
-      <div className="shelf__header">
-        <h2 className="shelf__title">Your shelf</h2>
-        <span className="shelf__count">{books.length} / 10</span>
+      <div className="shelf-header">
+        <h2>Your books</h2>
+        <span>{books.length}/10</span>
       </div>
 
       {books.length === 0 ? (
-        <p className="shelf__empty">
-          Search above and add a few books you love. We'll find what to read next.
-        </p>
+        <p className="shelf-empty">Search above and add a few books you like.</p>
       ) : (
-        <div className="shelf__rail">
+        <ul className="shelf-list">
           {books.map((book) => (
-            <button
-              key={book.book_id}
-              className="shelf__spine"
-              style={{ background: spineColor(book.book_id) }}
-              onClick={() => onRemove(book.book_id)}
-              title={`Remove ${book.title}`}
-            >
-              <span className="shelf__spine-title">{book.title}</span>
-              <span className="shelf__spine-remove" aria-hidden="true">
-                ✕
-              </span>
-            </button>
+            <li key={book.book_id} className="shelf-item">
+              <span>{book.title}</span>
+              <button onClick={() => onRemove(book.book_id)} aria-label={`Remove ${book.title}`}>
+                x
+              </button>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
 
       <button
-        className="shelf__cta"
+        className="btn-primary"
         onClick={onGetRecommendations}
         disabled={books.length === 0 || loading}
       >
-        {loading ? "Reading your shelf…" : "Get recommendations"}
+        {loading ? "Loading..." : "Get recommendations"}
       </button>
     </div>
   );

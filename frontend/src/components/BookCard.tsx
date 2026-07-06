@@ -14,43 +14,28 @@ export function BookCard({ book, onAdd, disabled }: Props) {
   const rec = isRecommendation(book) ? book : null;
 
   return (
-    <article className="book-card">
-      <div className="book-card__cover-wrap">
+    <div className="card">
+      <div className="card-cover">
         {book.image_url ? (
-          <img
-            className="book-card__cover"
-            src={book.image_url}
-            alt={`Cover of ${book.title}`}
-            loading="lazy"
-          />
+          <img src={book.image_url} alt={book.title} loading="lazy" />
         ) : (
-          <div className="book-card__cover book-card__cover--placeholder">
-            {book.title.slice(0, 1)}
-          </div>
+          <div className="card-cover-placeholder">{book.title.slice(0, 1)}</div>
         )}
-        {rec && (
-          <span className="book-card__match" title="Match strength">
-            {Math.round(rec.score * 100)}% match
-          </span>
-        )}
+        {rec && <span className="card-score">{Math.round(rec.score * 100)}%</span>}
       </div>
-      <div className="book-card__body">
-        <h3 className="book-card__title">{book.title}</h3>
-        <p className="book-card__authors">{book.authors}</p>
-        <p className="book-card__meta">
+      <div className="card-body">
+        <h3>{book.title}</h3>
+        <p className="card-authors">{book.authors}</p>
+        <p className="card-meta">
           {book.original_publication_year ? `${book.original_publication_year} · ` : ""}
-          ★ {book.average_rating.toFixed(2)}
+          {book.average_rating.toFixed(2)} stars
         </p>
       </div>
       {onAdd && (
-        <button
-          className="book-card__add"
-          onClick={() => onAdd(book)}
-          disabled={disabled}
-        >
-          {disabled ? "On your shelf" : "Add to shelf"}
+        <button onClick={() => onAdd(book)} disabled={disabled}>
+          {disabled ? "added" : "add"}
         </button>
       )}
-    </article>
+    </div>
   );
 }

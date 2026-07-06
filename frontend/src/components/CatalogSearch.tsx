@@ -14,6 +14,7 @@ export function CatalogSearch({ onSelect, selectedIds }: Props) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // debounce so we don't fire a request on every keystroke
   useEffect(() => {
     const handle = setTimeout(async () => {
       if (!query.trim()) {
@@ -45,33 +46,25 @@ export function CatalogSearch({ onSelect, selectedIds }: Props) {
   }, []);
 
   return (
-    <div className="catalog-search" ref={containerRef}>
-      <label className="catalog-search__label" htmlFor="book-search">
-        Find a book you love
-      </label>
-      <div className="catalog-search__input-wrap">
-        <input
-          id="book-search"
-          type="text"
-          className="catalog-search__input"
-          placeholder="Try “Dune”, “Jane Austen”, “Circe”…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => results.length > 0 && setOpen(true)}
-          autoComplete="off"
-        />
-        {loading && <span className="catalog-search__spinner" aria-hidden="true" />}
-      </div>
+    <div className="search-box" ref={containerRef}>
+      <input
+        type="text"
+        placeholder="search for a book or author..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onFocus={() => results.length > 0 && setOpen(true)}
+        autoComplete="off"
+      />
+      {loading && <span className="loading-dot" />}
 
       {open && results.length > 0 && (
-        <ul className="catalog-search__results">
+        <ul className="search-results">
           {results.map((book) => {
             const already = selectedIds.has(book.book_id);
             return (
               <li key={book.book_id}>
                 <button
                   type="button"
-                  className="catalog-search__result"
                   disabled={already}
                   onClick={() => {
                     onSelect(book);
@@ -80,16 +73,13 @@ export function CatalogSearch({ onSelect, selectedIds }: Props) {
                     setOpen(false);
                   }}
                 >
-                  {book.small_image_url ? (
-                    <img src={book.small_image_url} alt="" className="catalog-search__thumb" />
-                  ) : (
-                    <span className="catalog-search__thumb catalog-search__thumb--placeholder" />
-                  )}
-                  <span className="catalog-search__result-text">
-                    <span className="catalog-search__result-title">{book.title}</span>
-                    <span className="catalog-search__result-authors">{book.authors}</span>
+                  {book.small_image_url && <img src={book.small_image_url} alt="" />}
+                  <span>
+                    <b>{book.title}</b>
+                    <br />
+                    {book.authors}
                   </span>
-                  {already && <span className="catalog-search__badge">added</span>}
+                  {already && <em>added</em>}
                 </button>
               </li>
             );
