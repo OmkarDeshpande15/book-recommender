@@ -3,6 +3,7 @@ import type { Book, Recommendation } from "../types";
 interface Props {
   book: Book | Recommendation;
   onAdd?: (book: Book) => void;
+  onSimilar?: (book: Book) => void;
   disabled?: boolean;
 }
 
@@ -10,7 +11,7 @@ function isRecommendation(book: Book | Recommendation): book is Recommendation {
   return "score" in book;
 }
 
-export function BookCard({ book, onAdd, disabled }: Props) {
+export function BookCard({ book, onAdd, onSimilar, disabled }: Props) {
   const rec = isRecommendation(book) ? book : null;
 
   return (
@@ -31,11 +32,18 @@ export function BookCard({ book, onAdd, disabled }: Props) {
           {book.average_rating.toFixed(2)} stars
         </p>
       </div>
-      {onAdd && (
-        <button onClick={() => onAdd(book)} disabled={disabled}>
-          {disabled ? "added" : "add"}
-        </button>
-      )}
+      <div className="card-actions">
+        {onAdd && (
+          <button onClick={() => onAdd(book)} disabled={disabled}>
+            {disabled ? "added" : "add"}
+          </button>
+        )}
+        {onSimilar && (
+          <button className="card-similar" onClick={() => onSimilar(book)}>
+            more like this
+          </button>
+        )}
+      </div>
     </div>
   );
 }

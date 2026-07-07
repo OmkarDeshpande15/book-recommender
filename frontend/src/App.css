@@ -274,19 +274,123 @@ main h2 {
   margin: 0;
 }
 
-.card > button {
-  margin: 0.5rem 0.7rem 0.7rem;
+/* tabs */
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.tabs button {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.tabs button.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+/* alpha slider */
+
+.alpha-slider {
+  margin-bottom: 1rem;
+  font-size: 0.8rem;
+  color: #444;
+}
+
+.alpha-slider label {
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.alpha-slider input[type="range"] {
+  width: 100%;
+}
+
+.alpha-labels {
+  display: flex;
+  justify-content: space-between;
+  color: #999;
+  font-size: 0.7rem;
+}
+
+/* genre browse */
+
+.genre-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.genre-chip {
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #ccc;
+  background: white;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+.genre-chip span {
+  color: #999;
+  font-size: 0.72rem;
+}
+
+.genre-chip.active {
+  background: #eef2ff;
+  border-color: #2563eb;
+}
+
+/* similar panel */
+
+.similar-panel {
+  margin-bottom: 1.5rem;
+}
+
+.back-link {
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 0.6rem;
+  font-size: 0.85rem;
+}
+
+/* card actions */
+
+.card-actions {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0 0.7rem 0.7rem;
+}
+
+.card-actions button {
+  flex: 1;
   padding: 0.35rem;
   border: 1px solid #ccc;
   background: white;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
 }
 
-.card > button:disabled {
+.card-actions button:disabled {
   color: #999;
   cursor: default;
+}
+
+.card-similar {
+  color: #2563eb;
 }
 
 footer {

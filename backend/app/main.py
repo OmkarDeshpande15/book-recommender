@@ -1,9 +1,12 @@
 """FastAPI app for the book recommender.
 
 Routes:
-  GET  /api/books/search   - search by title/author
-  GET  /api/books/popular  - starter list for the empty state
-  POST /api/recommend      - the actual matching endpoint
+  GET  /api/books/search       - search by title/author
+  GET  /api/books/popular      - starter list for the empty state
+  GET  /api/books/{id}/similar - books similar to one specific book
+  GET  /api/genres             - list of genres with book counts
+  GET  /api/books/by-genre     - books tagged with a given genre
+  POST /api/recommend          - the taste-profile matching endpoint
 """
 
 from __future__ import annotations
@@ -76,6 +79,40 @@ def search_books(
 def popular_books(limit: int = Query(20, ge=1, le=50)) -> list[BookOut]:
     """A default set of popular books, shown before the user has picked any."""
     rows = database.get_popular_books(limit=limit)
+    return [_row_to_book(r) for r in rows]
+
+
+@app.get("/api/books/{book_id}/similar", response_model=list[RecommendationOut])
+def similar_books(book_id: int, limit: int = Query(12, ge=1, le=50)) -> list[RecommendationOut]:
+    """Books similar to one specific book (content + collaborative blend)."""
+    if book_id not in recommender.known_ids([book_id]):
+        raise HTTPException(status_code=404, detail=f"Unknown book_id: {book_id}")
+
+    ranked = recommender.recommend([book_id], top_n=limit)
+    book_rows = database.get_books_by_ids([bid for bid, _ in ranked])
+
+    results: list[RecommendationOut] = []
+    for bid, score in ranked:
+        row = book_rows.get(bid)
+        if row is None:
+            continue
+        results.append(RecommendationOut(**dict(row), score=round(score, 4)))
+    return results
+
+
+@app.get("/api/genres")
+def genres() -> list[dict]:
+    """All genres available to browse, with how many books carry each one."""
+    return database.get_genres()
+
+
+@app.get("/api/books/by-genre", response_model=list[BookOut])
+def books_by_genre(
+    genre: str = Query(..., min_length=1),
+    limit: int = Query(20, ge=1, le=50),
+) -> list[BookOut]:
+    """Books tagged with a given genre, most-rated first."""
+    rows = database.get_books_by_genre(genre, limit=limit)
     return [_row_to_book(r) for r in rows]
 
 

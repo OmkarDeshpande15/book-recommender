@@ -5,9 +5,18 @@ interface Props {
   onRemove: (bookId: number) => void;
   onGetRecommendations: () => void;
   loading: boolean;
+  alpha: number;
+  onAlphaChange: (value: number) => void;
 }
 
-export function Shelf({ books, onRemove, onGetRecommendations, loading }: Props) {
+export function Shelf({
+  books,
+  onRemove,
+  onGetRecommendations,
+  loading,
+  alpha,
+  onAlphaChange,
+}: Props) {
   return (
     <div className="shelf">
       <div className="shelf-header">
@@ -29,6 +38,25 @@ export function Shelf({ books, onRemove, onGetRecommendations, loading }: Props)
           ))}
         </ul>
       )}
+
+      <div className="alpha-slider">
+        <label htmlFor="alpha">
+          match style: {alpha >= 0.7 ? "genre-based" : alpha <= 0.3 ? "reader-based" : "balanced"}
+        </label>
+        <input
+          id="alpha"
+          type="range"
+          min={0}
+          max={1}
+          step={0.1}
+          value={alpha}
+          onChange={(e) => onAlphaChange(Number(e.target.value))}
+        />
+        <div className="alpha-labels">
+          <span>same readers liked</span>
+          <span>same genre/tags</span>
+        </div>
+      </div>
 
       <button
         className="btn-primary"

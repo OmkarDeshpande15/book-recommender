@@ -16,7 +16,7 @@ import psycopg2.extras
 from psycopg2 import pool
 
 DATABASE_URL = os.environ.get(
-    "DATABASE_URL", "postgresql://shelfmate:shelfmate@db:5432/shelfmate"
+    "DATABASE_URL", "postgresql://bookrec:bookrec@db:5432/bookrec"
 )
 
 _COLUMNS = (
@@ -90,5 +90,35 @@ def get_popular_books(limit: int = 20) -> list[dict]:
     with get_connection() as conn:
         with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
             cur.execute(sql, (limit,))
+            return cur.fetchall()
+
+
+def get_genres() -> list[dict]:
+    """All genres with how many books carry that tag, most common first."""
+    sql = """
+        SELECT genre, COUNT(*) AS book_count
+        FROM book_genres
+        GROUP BY genre
+        ORDER BY book_count DESC
+    """
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(sql)
+            return cur.fetchall()
+
+
+def get_books_by_genre(genre: str, limit: int = 20) -> list[dict]:
+    """Books tagged with a given genre, most-rated first."""
+    sql = f"""
+        SELECT {', '.join('b.' + c.strip() for c in _COLUMNS.split(','))}
+        FROM books b
+        JOIN book_genres g ON g.book_id = b.book_id
+        WHERE g.genre = %s
+        ORDER BY b.ratings_count DESC
+        LIMIT %s
+    """
+    with get_connection() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(sql, (genre, limit))
             return cur.fetchall()
 

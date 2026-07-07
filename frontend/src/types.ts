@@ -12,3 +12,8 @@ export interface Book {
 export interface Recommendation extends Book {
   score: number;
 }
+
+export interface Genre {
+  genre: string;
+  book_count: number;
+}

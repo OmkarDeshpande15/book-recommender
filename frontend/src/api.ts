@@ -1,4 +1,4 @@
-import type { Book, Recommendation } from "./types";
+import type { Book, Recommendation, Genre } from "./types";
 
 // In production (Docker Compose) this is injected via nginx/env; in local
 // `npm run dev` it falls back to the backend's default port.
@@ -36,4 +36,21 @@ export async function getRecommendations(
     body: JSON.stringify({ book_ids: bookIds, top_n: topN, alpha }),
   });
   return handle<Recommendation[]>(res);
+}
+
+export async function getSimilarBooks(bookId: number, limit = 12): Promise<Recommendation[]> {
+  const res = await fetch(`${API_BASE}/api/books/${bookId}/similar?limit=${limit}`);
+  return handle<Recommendation[]>(res);
+}
+
+export async function getGenres(): Promise<Genre[]> {
+  const res = await fetch(`${API_BASE}/api/genres`);
+  return handle<Genre[]>(res);
+}
+
+export async function getBooksByGenre(genre: string, limit = 20): Promise<Book[]> {
+  const res = await fetch(
+    `${API_BASE}/api/books/by-genre?genre=${encodeURIComponent(genre)}&limit=${limit}`
+  );
+  return handle<Book[]>(res);
 }
