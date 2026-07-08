@@ -84,21 +84,6 @@ What distinguishes this submission from a minimal implementation:
 | Genre browsing | Browse the highest-rated books within any of 20 curated genre categories, without requiring prior book selection |
 | Search | Debounced, case-insensitive search by title or author |
 
-### Screenshots
-
-<!--
-  Screenshots go here. Since the reviewer is opening this repository from
-  a link with no other context, a visual preview matters more than it
-  would in a live walkthrough. To add them:
-    1. Run `docker compose up --build` and open http://localhost:3000
-    2. Capture: (a) the landing/search view, (b) a taste-match result
-       grid, (c) the genre-browse view
-    3. Save the images under docs/screenshots/ (e.g. taste-match.png,
-       genre-browse.png) and replace the placeholder lines below with:
-       ![Taste match results](docs/screenshots/taste-match.png)
--->
-
-*(screenshots to be added — see comment above in the source of this file)*
 
 ## 4. Architecture
 
