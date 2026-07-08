@@ -3,6 +3,30 @@
 A recommendation-service submission for the Matching / Recommendation Service
 project round (deadline: 8 July 2026).
 
+**At a glance**
+
+| | |
+|---|---|
+| Type | Recommendation service (see Section 1) |
+| Stack | React + TypeScript (frontend) · Python/FastAPI (backend) · PostgreSQL (database) |
+| Data | goodbooks-10k — 10,000 books, ~6,000,000 ratings |
+| Run it | `docker compose up --build`, then open `http://localhost:3000` (see Section 5–6) |
+
+**Contents:** [1. Classification](#1-project-classification) ·
+[2. Why this project](#2-why-this-project-and-what-is-special-about-it) ·
+[3. Features](#3-features) ·
+[4. Architecture](#4-architecture) ·
+[5. Prerequisites](#5-prerequisites) ·
+[6. Setup](#6-installation-and-setup) ·
+[7. How to use](#7-how-to-use-the-application) ·
+[8. API](#8-api-reference) ·
+[9. Data](#9-data-source-and-preparation) ·
+[10. Technical explanation](#10-technical-explanation-of-the-recommendation-logic) ·
+[11. Structure](#11-project-structure) ·
+[12. Stack](#12-technology-stack) ·
+[13. Version control](#13-version-control) ·
+[14. Originality](#14-statement-of-originality)
+
 ## 1. Project classification
 
 The project brief defines three acceptable application types: Matching,
@@ -60,6 +84,22 @@ What distinguishes this submission from a minimal implementation:
 | Single-book recommendation | "More like this" — recommendations generated from one specific book |
 | Genre browsing | Browse the highest-rated books within any of 20 curated genre categories, without requiring prior book selection |
 | Search | Debounced, case-insensitive search by title or author |
+
+### Screenshots
+
+<!--
+  Screenshots go here. Since the reviewer is opening this repository from
+  a link with no other context, a visual preview matters more than it
+  would in a live walkthrough. To add them:
+    1. Run `docker compose up --build` and open http://localhost:3000
+    2. Capture: (a) the landing/search view, (b) a taste-match result
+       grid, (c) the genre-browse view
+    3. Save the images under docs/screenshots/ (e.g. taste-match.png,
+       genre-browse.png) and replace the placeholder lines below with:
+       ![Taste match results](docs/screenshots/taste-match.png)
+-->
+
+*(screenshots to be added — see comment above in the source of this file)*
 
 ## 4. Architecture
 
