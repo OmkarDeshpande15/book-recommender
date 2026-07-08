@@ -12,20 +12,22 @@ project round (deadline: 8 July 2026).
 | Data | goodbooks-10k — 10,000 books, ~6,000,000 ratings |
 | Run it | `docker compose up --build`, then open `http://localhost:3000` (see Section 5–6) |
 
-**Contents:** [1. Classification](#1-project-classification) ·
-[2. Why this project](#2-why-this-project-and-what-is-special-about-it) ·
-[3. Features](#3-features) ·
-[4. Architecture](#4-architecture) ·
-[5. Prerequisites](#5-prerequisites) ·
-[6. Setup](#6-installation-and-setup) ·
-[7. How to use](#7-how-to-use-the-application) ·
-[8. API](#8-api-reference) ·
-[9. Data](#9-data-source-and-preparation) ·
-[10. Technical explanation](#10-technical-explanation-of-the-recommendation-logic) ·
-[11. Structure](#11-project-structure) ·
-[12. Stack](#12-technology-stack) ·
-[13. Version control](#13-version-control) ·
-[14. Originality](#14-statement-of-originality)
+**Contents**
+
+- [1. Project classification](#1-project-classification)
+- [2. Why this project, and what is special about it](#2-why-this-project-and-what-is-special-about-it)
+- [3. Features](#3-features)
+- [4. Architecture](#4-architecture)
+- [5. Prerequisites](#5-prerequisites)
+- [6. Installation and setup](#6-installation-and-setup)
+- [7. How to use the application](#7-how-to-use-the-application)
+- [8. API reference](#8-api-reference)
+- [9. Data source and preparation](#9-data-source-and-preparation)
+- [10. Technical explanation of the recommendation logic](#10-technical-explanation-of-the-recommendation-logic)
+- [11. Project structure](#11-project-structure)
+- [12. Technology stack](#12-technology-stack)
+- [13. Version control](#13-version-control)
+- [14. Statement of originality](#14-statement-of-originality)
 
 ## 1. Project classification
 
