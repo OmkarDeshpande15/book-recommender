@@ -3,22 +3,22 @@ services:
     build:
       context: ./db
       dockerfile: Dockerfile
-    container_name: shelfmate-db
+    container_name: bookmatcher-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: shelfmate
-      POSTGRES_USER: shelfmate
-      POSTGRES_PASSWORD: shelfmate
+      POSTGRES_DB: bookmatcher
+      POSTGRES_USER: bookmatcher
+      POSTGRES_PASSWORD: bookmatcher
     volumes:
-      - shelfmate-db-data:/var/lib/postgresql/data
+      - bookmatcher-db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U shelfmate -d shelfmate"]
+      test: ["CMD-SHELL", "pg_isready -U bookmatcher -d bookmatcher"]
       interval: 5s
       timeout: 5s
       retries: 10
       start_period: 5s
     networks:
-      - shelfmate-net
+      - bookmatcher-net
     # ports:
     #   - "5432:5432"
 
@@ -26,15 +26,15 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: shelfmate-backend
+    container_name: bookmatcher-backend
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://shelfmate:shelfmate@db:5432/shelfmate
+      DATABASE_URL: postgresql://bookmatcher:bookmatcher@db:5432/bookmatcher
     depends_on:
       db:
         condition: service_healthy
     networks:
-      - shelfmate-net
+      - bookmatcher-net
     # ports:
     #   - "8000:8000"
 
@@ -42,18 +42,18 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: shelfmate-frontend
+    container_name: bookmatcher-frontend
     restart: unless-stopped
     depends_on:
       - backend
     ports:
       - "3000:80"
     networks:
-      - shelfmate-net
+      - bookmatcher-net
 
 networks:
-  shelfmate-net:
+  bookmatcher-net:
     driver: bridge
 
 volumes:
-  shelfmate-db-data:
+  bookmatcher-db-data:

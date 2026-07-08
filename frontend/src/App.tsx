@@ -70,7 +70,7 @@ export default function App() {
     <div className="page">
       <header className="hero">
         <p className="hero__eyebrow">A matching service for readers</p>
-        <h1 className="hero__title">Shelfmate</h1>
+        <h1 className="hero__title">Book Matcher</h1>
         <p className="hero__subtitle">
           Tell us a few books you've loved. We'll read the room — genres, tone, the
           company they keep on other people's shelves — and hand you what's next.

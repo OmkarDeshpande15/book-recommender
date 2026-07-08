@@ -11,24 +11,42 @@ interface Props {
 
 export function GenreBrowse({ onAdd, onSimilar, selectedIds }: Props) {
   const [genres, setGenres] = useState<Genre[]>([]);
+  const [genresError, setGenresError] = useState<string | null>(null);
   const [active, setActive] = useState<string | null>(null);
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
+  const [booksError, setBooksError] = useState<string | null>(null);
 
   useEffect(() => {
     getGenres()
-      .then(setGenres)
-      .catch(() => setGenres([]));
+      .then((g) => {
+        setGenres(g);
+        setGenresError(null);
+      })
+      .catch(() => {
+        setGenresError(
+          "Couldn't load genres. If you just started the app for the first time, wait a few seconds and refresh — the database might still be seeding."
+        );
+      });
   }, []);
 
   useEffect(() => {
     if (!active) return;
     setLoading(true);
+    setBooksError(null);
     getBooksByGenre(active, 12)
       .then(setBooks)
-      .catch(() => setBooks([]))
+      .catch(() => setBooksError("Couldn't load books for this genre."))
       .finally(() => setLoading(false));
   }, [active]);
+
+  if (genresError) {
+    return <p className="error">{genresError}</p>;
+  }
+
+  if (genres.length === 0) {
+    return <p className="shelf-empty">Loading genres...</p>;
+  }
 
   return (
     <div>
@@ -47,6 +65,7 @@ export function GenreBrowse({ onAdd, onSimilar, selectedIds }: Props) {
       {active && (
         <>
           <h2>{active}</h2>
+          {booksError && <p className="error">{booksError}</p>}
           {loading ? (
             <p className="shelf-empty">Loading...</p>
           ) : (

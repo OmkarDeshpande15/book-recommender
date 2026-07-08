@@ -1,4 +1,4 @@
-# Shelfmate
+# Book Matcher
 
 Book recommendations based on tags and reader ratings, not popularity.
 Built for the recruitment project round (matching/recommendation service).

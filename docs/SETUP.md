@@ -51,8 +51,8 @@ the backend or the database directly for debugging, uncomment the `ports:`
 lines under `backend` and `db` in `docker-compose.yml`, then:
 
 - API: http://localhost:8000, swagger docs at http://localhost:8000/api/docs
-- Postgres: `psql -h localhost -U shelfmate -d shelfmate` (password is
-  also `shelfmate` — it's hardcoded in the compose file since this is a
+- Postgres: `psql -h localhost -U bookmatcher -d bookmatcher` (password is
+  also `bookmatcher` — it's hardcoded in the compose file since this is a
   demo project seeded entirely from public data, nothing sensitive)
 
 ## endpoints
