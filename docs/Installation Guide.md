@@ -1,4 +1,4 @@
-# Setup Guide
+# Installation Guide
 
 Supplementary detail to the "Prerequisites" and "Installation and setup"
 sections of the main README. Read those first; this document covers
