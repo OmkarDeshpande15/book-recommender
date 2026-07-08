@@ -59,7 +59,7 @@ the `ports:` lines under `backend` and `db` in `docker-compose.yml`, then:
 
 - API: http://localhost:8000
 - Swagger docs: http://localhost:8000/api/docs
-- Postgres: `psql -h localhost -U bookrec -d bookrec` (password `bookrec`)
+- Postgres: `psql -h localhost -U shelfmate -d shelfmate` (password `shelfmate`)
 
 ## Regenerating the data (optional)
 

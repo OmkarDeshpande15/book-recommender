@@ -16,7 +16,7 @@ import psycopg2.extras
 from psycopg2 import pool
 
 DATABASE_URL = os.environ.get(
-    "DATABASE_URL", "postgresql://bookrec:bookrec@db:5432/bookrec"
+    "DATABASE_URL", "postgresql://shelfmate:shelfmate@db:5432/shelfmate"
 )
 
 _COLUMNS = (

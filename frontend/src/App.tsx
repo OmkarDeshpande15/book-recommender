@@ -68,9 +68,13 @@ export default function App() {
 
   return (
     <div className="page">
-      <header className="header">
-        <h1>BookRec</h1>
-        <p>Add a few books you like, get recommendations based on tags and reader ratings.</p>
+      <header className="hero">
+        <p className="hero__eyebrow">A matching service for readers</p>
+        <h1 className="hero__title">Shelfmate</h1>
+        <p className="hero__subtitle">
+          Tell us a few books you've loved. We'll read the room — genres, tone, the
+          company they keep on other people's shelves — and hand you what's next.
+        </p>
         <CatalogSearch onSelect={addToShelf} selectedIds={selectedIds} />
       </header>
 
@@ -83,7 +87,7 @@ export default function App() {
         </button>
       </nav>
 
-      <main>
+      <main className="content">
         {similarFor && (
           <section className="similar-panel">
             <button className="back-link" onClick={() => setSimilarFor(null)}>

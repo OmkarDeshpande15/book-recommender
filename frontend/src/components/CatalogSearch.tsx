@@ -47,9 +47,13 @@ export function CatalogSearch({ onSelect, selectedIds }: Props) {
 
   return (
     <div className="search-box" ref={containerRef}>
+      <label className="search-label" htmlFor="book-search">
+        Find a book you love
+      </label>
       <input
+        id="book-search"
         type="text"
-        placeholder="search for a book or author..."
+        placeholder="Try “Dune”, “Jane Austen”, “Circe”…"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => results.length > 0 && setOpen(true)}

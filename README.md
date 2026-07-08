@@ -1,4 +1,4 @@
-# BookRec — book recommendation service
+# Shelfmate — book recommendation service
 
 A matching/recommendation web app for the recruitment project round. Add a
 few books you like, get recommendations based on tags and reader ratings.
@@ -81,7 +81,7 @@ Full technical write-up: **[docs/TECHNICAL.md](docs/TECHNICAL.md)**.
 frontend (nginx, :3000) --/api--> backend (FastAPI, :8000) --SQL--> db (Postgres, :5432)
 ```
 
-All three on a custom Docker bridge network (`bookrec-net`), each with its
+All three on a custom Docker bridge network (`shelfmate-net`), each with its
 own Dockerfile:
 
 - **frontend** — React + TypeScript built with Vite, served by nginx. Nginx
@@ -126,8 +126,8 @@ docker compose up --build
 First build takes a few minutes (installing deps + training the model from
 ~6M ratings). After that it's fast since the artifacts are baked in.
 
-Postgres credentials are hardcoded in `docker-compose.yml` (`bookrec` /
-`bookrec`) since this is a demo seeded from public data with nothing
+Postgres credentials are hardcoded in `docker-compose.yml` (`shelfmate` /
+`shelfmate`) since this is a demo seeded from public data with nothing
 sensitive in it — in a real deployment these would be env vars/secrets.
 
 Usage walkthrough: **[docs/USAGE.md](docs/USAGE.md)**.

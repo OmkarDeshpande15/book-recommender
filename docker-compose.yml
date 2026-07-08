@@ -3,22 +3,22 @@ services:
     build:
       context: ./db
       dockerfile: Dockerfile
-    container_name: bookrec-db
+    container_name: shelfmate-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: bookrec
-      POSTGRES_USER: bookrec
-      POSTGRES_PASSWORD: bookrec
+      POSTGRES_DB: shelfmate
+      POSTGRES_USER: shelfmate
+      POSTGRES_PASSWORD: shelfmate
     volumes:
-      - bookrec-db-data:/var/lib/postgresql/data
+      - shelfmate-db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U bookrec -d bookrec"]
+      test: ["CMD-SHELL", "pg_isready -U shelfmate -d shelfmate"]
       interval: 5s
       timeout: 5s
       retries: 10
       start_period: 5s
     networks:
-      - bookrec-net
+      - shelfmate-net
     # ports:
     #   - "5432:5432"
 
@@ -26,15 +26,15 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: bookrec-backend
+    container_name: shelfmate-backend
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://bookrec:bookrec@db:5432/bookrec
+      DATABASE_URL: postgresql://shelfmate:shelfmate@db:5432/shelfmate
     depends_on:
       db:
         condition: service_healthy
     networks:
-      - bookrec-net
+      - shelfmate-net
     # ports:
     #   - "8000:8000"
 
@@ -42,18 +42,18 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: bookrec-frontend
+    container_name: shelfmate-frontend
     restart: unless-stopped
     depends_on:
       - backend
     ports:
       - "3000:80"
     networks:
-      - bookrec-net
+      - shelfmate-net
 
 networks:
-  bookrec-net:
+  shelfmate-net:
     driver: bridge
 
 volumes:
-  bookrec-db-data:
+  shelfmate-db-data:

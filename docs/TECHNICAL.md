@@ -2,7 +2,7 @@
 
 ## Overview
 
-BookRec is a hybrid recommender combining **content-based filtering**
+Shelfmate is a hybrid recommender combining **content-based filtering**
 (tags/author/title) with **collaborative filtering** (reader ratings). Both
 models are precomputed once, at backend image build time, into small NumPy
 arrays that get loaded into memory when the API starts — there's no ML
@@ -139,7 +139,7 @@ full-text index or search engine needed at this scale.
 Defined in `docker-compose.yml`:
 
 - **db** — `postgres:16-alpine` extended with a small `Dockerfile` that
-  copies in the seed CSVs and `init.sql`. Named volume `bookrec-db-data`
+  copies in the seed CSVs and `init.sql`. Named volume `shelfmate-db-data`
   for persistence. Healthcheck via `pg_isready`.
 - **backend** — multi-stage build: a `build` stage installs
   pandas/scipy/scikit-learn and runs `preprocess.py` to produce the
@@ -149,7 +149,7 @@ Defined in `docker-compose.yml`:
 - **frontend** — multi-stage build: `node:20-alpine` runs the Vite build,
   then `nginx:1.27-alpine` serves the static output and proxies `/api`.
 
-All three join the custom bridge network `bookrec-net`, addressing each
+All three join the custom bridge network `shelfmate-net`, addressing each
 other by Compose service name (`db`, `backend`) via Docker's internal DNS.
 
 ## Extending
