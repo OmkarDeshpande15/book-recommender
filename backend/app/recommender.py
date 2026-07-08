@@ -1,11 +1,12 @@
 """Recommendation engine.
 
-Loads the two precomputed vectors from preprocess.py (content-based and
-collaborative-filtering) and scores books against a user's picks.
+Loads the two precomputed vectors produced by preprocess.py (content-based
+and collaborative-filtering) and scores books against a user's selection.
 
-Both vectors are normalized, so a dot product = cosine similarity.
-That means scoring the full catalogue is just one matrix multiply,
-which is fast enough to not need a real vector DB for 10k books.
+Both vectors are L2-normalized, so a dot product between any two rows is
+equivalent to their cosine similarity. Scoring the entire catalogue is
+therefore a single matrix multiplication, which is fast enough at this
+scale (10,000 books) without a dedicated vector-search library.
 """
 
 from __future__ import annotations

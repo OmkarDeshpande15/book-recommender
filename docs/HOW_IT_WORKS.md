@@ -1,99 +1,147 @@
-# How it works
+# How the Application Works
 
-## using it
+Supplementary detail to the "How to use the application" and "Technical
+explanation" sections of the main README.
 
-Two tabs at the top — **Taste match** and **Browse by genre**.
+## Usage walkthrough
 
-Taste match: search for books, add a few to your shelf, hit get
-recommendations. There's a slider for how much to weight genre/tag
-similarity vs "readers who liked this also liked" — default is right in
-the middle.
+The application presents two modes, selected by the tabs beneath the
+search bar: **Taste match** and **Browse by genre**.
 
-Browse by genre: skip the shelf entirely, just pick a genre chip and see
-what's rated highest in it.
+### Taste-match mode
 
-Either way, every result card has a "more like this" button that pivots
-to item-to-item recommendations for that one specific book.
+**Example:** searching for and adding "The Hobbit" to the shelf, then
+selecting "Get recommendations" with the match-weight slider at its
+default (0.5) position, returns results including *The Fellowship of the
+Ring*, *The Lord of the Rings*, and other Tolkien and epic-fantasy
+titles, each with a match percentage.
 
-Match percentages only mean something relative to the other results in
-that same list — they're not some absolute quality score.
+Moving the slider toward "same genre/tags" increases the weight given to
+the content-based model (tags, author, title similarity); moving it
+toward "same readers liked" increases the weight given to the
+collaborative-filtering model (rating-pattern similarity). This directly
+controls the `alpha` parameter described in the README's technical
+section.
 
-## the data
+Match percentages are relative to the other results within the same
+response, not an absolute quality measure — a 95% match in one request
+and a 95% match in a different request are not directly comparable to
+each other.
 
-`books.csv` (10k books), `ratings.csv` (~6M rows), `tags.csv` +
-`book_tags.csv` (per-book Goodreads tags). All from goodbooks-10k, see the
-main README for the source link.
+### Genre-browse mode
 
-Two tables end up in Postgres:
+Selecting a genre chip (for example, "Mystery") queries the database
+directly for the highest-rated-count books carrying that genre label, and
+displays them without requiring the user to select any books first. This
+mode does not use the recommendation model at all — see "Genre browsing"
+below.
 
-**books** — book_id, title, authors, publication year, average rating,
-ratings count, cover image urls. Straight from `books.csv`, cleaned up a
-bit (missing years/ratings filled with defaults).
+### Single-book recommendations
 
-**book_genres** — book_id + genre, up to 3 rows per book. This one doesn't
-come straight from the dataset — Goodreads tags are mostly noise, so
-`backend/app/build_genres.py` maps about 40 recognizable raw tags
-(`sci-fi`, `ya`, `non-fiction`, `historical`...) onto ~20 clean labels and
-keeps each book's top 3 by vote count. Everything else (`to-read`,
-`kindle`, `owned`, year tags, etc.) gets dropped.
+The "more like this" button, present on every result card regardless of
+mode, calls the same recommendation logic used for taste-match mode, but
+with a single book as the input rather than an entire shelf. The result
+is standard item-to-item similarity: recommendations based on that one
+book's own content and collaborative-filtering vectors.
 
-## the model
+## Data layer
 
-Not in the database — this lives as two small numpy arrays that get built
-once by `preprocess.py` and baked straight into the backend Docker image.
+Two tables exist in PostgreSQL, both seeded automatically from CSV files
+when the `db` container starts for the first time (see `db/init.sql`):
 
-**content vector, 100 numbers per book.** Take each book's top 12 tags
-(by vote count) + author + title, mash them into one string, run
-`TfidfVectorizer` on it (5000 max features, English stopwords stripped),
-then `TruncatedSVD` down to 100 dimensions.
+**`books`**
 
-**collaborative vector, 50 numbers per book.** Build a sparse matrix out
-of the ratings (deduped on user+book first, ~5.9M rows left, ~53k users x
-10k books), transpose it so rows are books, run `TruncatedSVD` down to 50
-dimensions.
+| Column | Type | Description |
+|---|---|---|
+| book_id | INTEGER (primary key) | |
+| title | TEXT | |
+| authors | TEXT | |
+| original_publication_year | INTEGER | |
+| average_rating | REAL | |
+| ratings_count | INTEGER | |
+| image_url | TEXT | Full-size cover image URL, from the source dataset |
+| small_image_url | TEXT | Thumbnail cover image URL |
 
-Both get L2-normalized. That's the whole trick — once vectors are
-normalized, a dot product between two of them equals their cosine
-similarity, so comparing books is just multiplication, no separate
-similarity library needed.
+**`book_genres`** (many-to-many; each book has at most 3 rows)
 
-**recommend a shelf of books:**
+| Column | Type | Description |
+|---|---|---|
+| book_id | INTEGER (references books) | |
+| genre | TEXT | One of 20 curated genre labels |
+
+## The recommendation model
+
+The recommendation model is not part of the relational database. It
+consists of two NumPy arrays, computed once by `backend/app/preprocess.py`
+at backend Docker image build time, and loaded into memory when the
+backend process starts:
+
+- `content_factors.npy` — shape (10000, 100). Each row is a book's
+  content vector, derived from its top 12 tags, author, and title.
+- `collab_factors.npy` — shape (10000, 50). Each row is a book's
+  collaborative-filtering vector, derived from the ratings matrix.
+
+Both arrays are L2-normalized, meaning the dot product of any two rows is
+mathematically equivalent to the cosine similarity between them. This
+allows the entire catalogue to be scored against a query vector using a
+single matrix-vector multiplication, without a dedicated similarity
+search library.
+
+**Scoring logic** (implemented in `backend/app/recommender.py`):
+
+```python
+content_profile = mean(content_factors[selected_book_indices])
+collab_profile  = mean(collab_factors[selected_book_indices])
+
+content_scores = content_factors @ content_profile
+collab_scores  = collab_factors @ collab_profile
+
+final_scores = alpha * content_scores + (1 - alpha) * collab_scores
 ```
-profile_content  = average(content_vectors of shelf books)
-profile_collab   = average(collab_vectors of shelf books)
 
-score = alpha * (catalogue_content · profile_content)
-      + (1-alpha) * (catalogue_collab · profile_collab)
+Results are sorted in descending order of `final_scores`, books already
+present in the query are excluded, and the top N (default 12) are
+returned with their scores rescaled from [−1, 1] to [0, 1] for display.
+
+## Genre browsing
+
+Genre browsing does not use the recommendation model. It is a
+conventional SQL query:
+
+```sql
+SELECT b.* FROM books b
+JOIN book_genres g ON g.book_id = b.book_id
+WHERE g.genre = %s
+ORDER BY b.ratings_count DESC
+LIMIT %s
 ```
-sort descending, drop books already on the shelf, return top N. `alpha` is
-whatever the UI slider is set to (0.5 default).
 
-**"more like this" on one book** is the exact same code, just called with
-a list of one book_id instead of several — the "profile" ends up being
-that book's own vector, so it's plain item-item similarity.
+The genre labels themselves are not derived automatically from the
+dataset; they were curated by hand in `backend/app/build_genres.py`,
+because the majority of raw Goodreads tags are not genre indicators
+(examples of discarded tags: `to-read`, `owned`, `kindle`, `2015`, and
+similar status/logistics tags). Approximately 40 recognizable genre-tag
+variants were mapped onto 20 clean labels; each book's top 3 genres by
+tag-vote count were retained.
 
-**genre browsing** isn't similarity-based at all, it's a SQL join against
-`book_genres` sorted by ratings count. No model involved.
+## Component responsibilities
 
-## code, roughly
+| File | Responsibility |
+|---|---|
+| `backend/app/main.py` | FastAPI route definitions |
+| `backend/app/recommender.py` | Loads the model vectors at startup; performs the scoring logic described above |
+| `backend/app/database.py` | PostgreSQL access via psycopg2, with a connection pool and retry-on-connect logic |
+| `backend/app/preprocess.py` | Builds the two model vector files; runs once, at backend image build time |
+| `backend/app/build_genres.py` | Builds the genre-mapping CSV; run manually if the mapping is changed, not part of the Docker build |
+| `frontend/src/api.ts` | Typed HTTP client; the sole point of contact between the frontend and the backend API |
+| `frontend/src/App.tsx` | Top-level application state (selected books, active mode, slider value, single-book view) |
 
-- `preprocess.py` — builds the two vector files, runs once at backend
-  image build time
-- `build_genres.py` — builds the genre table csv, run by hand when the
-  mapping changes, not part of the docker build
-- `recommender.py` — loads the vectors at startup, does the scoring math
-- `database.py` — talks to postgres (psycopg2 + a small connection pool,
-  retries on connect since the db container might still be booting)
-- `main.py` — the FastAPI routes
-- frontend `api.ts` is the only place that calls `fetch` — every
-  component goes through it
-- `App.tsx` holds the shelf state, the slider value, which tab is active,
-  and the "similar to X" panel state
+## Design note: catalogue size and similarity search
 
-## why 10k books doesn't need a real vector database
-
-At this size, scoring every book against a taste profile is one matrix
-multiply — a few milliseconds. A dedicated vector db (FAISS, Pinecone,
-whatever) would be solving a problem this project doesn't actually have.
-If this were scaled up to, say, a few million books, that'd change —
-approximate nearest neighbour search would start to matter at that point.
+At 10,000 books, scoring the entire catalogue against a query vector is
+a single matrix multiplication, completing in a few milliseconds. A
+dedicated vector-search library or database (for example, FAISS) was
+deliberately not used, since it would add complexity without a
+corresponding performance benefit at this scale. Such a library would
+become appropriate if the catalogue size increased by several orders of
+magnitude.

@@ -1,61 +1,92 @@
-# Setup
+# Setup Guide
 
-## what you need
+Supplementary detail to the "Prerequisites" and "Installation and setup"
+sections of the main README. Read those first; this document covers
+additional configuration, debugging, and troubleshooting steps not
+required for a standard first run.
 
-Docker + Docker Compose. Nothing else — everything else runs inside
-containers.
+## Verifying prerequisites
 
-```
+```bash
 docker --version
 docker compose version
 ```
 
-## running it
+Both must return a version number. Docker Desktop (or the Docker Engine
+on Linux) must be running before `docker compose up` is executed.
 
-```
+## Standard startup
+
+```bash
 git clone https://github.com/OmkarDeshpande15/book-recommender.git
 cd book-recommender
 docker compose up --build
 ```
 
-First run takes a few minutes — the backend build step also trains the
-recommendation model from the raw CSVs (about 6 million rows), so that's
-where most of the time goes. Everything after that is fast since the
-model gets baked into the image.
+Startup order, as defined in `docker-compose.yml`:
 
-Once you see the backend log `Uvicorn running on http://0.0.0.0:8000` and
-the frontend container is up, go to:
+1. The `db` container builds and starts, then seeds itself from
+   `db/books_clean.csv` and `db/book_genres.csv`. This seeding step runs
+   only once, the first time the container starts with an empty data
+   volume.
+2. Docker Compose waits for the `db` container's healthcheck
+   (`pg_isready`) to report healthy before starting the backend.
+3. The `backend` container builds. The build step trains the
+   recommendation model from the raw dataset CSVs, which is the slowest
+   part of the first build (several minutes, depending on hardware).
+   Once built, the backend connects to PostgreSQL and begins serving
+   requests.
+4. The `frontend` container builds (a Vite production build) and starts
+   nginx, which serves the built application and proxies API requests to
+   the backend.
 
-http://localhost:3000
+The application is ready once `http://localhost:3000` loads successfully
+and the backend log shows `Uvicorn running on http://0.0.0.0:8000`.
 
-## stopping / resetting
+## Stopping and resetting
 
-Ctrl+C, then:
-```
+Stop the application:
+```bash
 docker compose down
 ```
 
-If you want to wipe the database too (e.g. you edited something under
-`db/` and want it to reseed):
-```
+Stop the application and remove the database's persisted volume, forcing
+a full reseed on the next startup:
+```bash
 docker compose down -v
 docker compose up --build
 ```
-Postgres only runs its seed script the first time it starts on an empty
-volume, so `down -v` is the way to force a redo.
 
-## poking at things directly
+This step is required whenever the contents of `db/books_clean.csv` or
+`db/book_genres.csv` change, since the database only runs its seed
+script once, against an empty data volume. Running `docker compose up
+--build` without `down -v` first will not pick up schema or seed-data
+changes.
 
-By default only the frontend port is exposed (3000). If you want to hit
-the backend or the database directly for debugging, uncomment the `ports:`
-lines under `backend` and `db` in `docker-compose.yml`, then:
+## Exposing ports for debugging
 
-- API: http://localhost:8000, swagger docs at http://localhost:8000/api/docs
-- Postgres: `psql -h localhost -U bookmatcher -d bookmatcher` (password is
-  also `bookmatcher` — it's hardcoded in the compose file since this is a
-  demo project seeded entirely from public data, nothing sensitive)
+By default, only the frontend's port (3000) is published to the host.
+The backend and database ports are internal to the Docker network and
+are not reachable from outside the container network unless explicitly
+exposed.
 
-## endpoints
+To expose them, uncomment the corresponding `ports:` entries under the
+`backend` and `db` services in `docker-compose.yml`, then restart the
+containers. Once exposed:
+
+- Backend API: `http://localhost:8000`
+- Interactive API documentation (Swagger UI): `http://localhost:8000/api/docs`
+- PostgreSQL: connect with `psql -h localhost -U bookrecsys -d bookrecsys`
+  (password: `bookrecsys`)
+
+The database credentials are defined directly in `docker-compose.yml`
+rather than in a separate secrets file. This is appropriate for this
+submission because the database contains only public dataset content
+with no sensitive information; in a production deployment, credentials
+of this kind would instead be supplied through environment variables or
+a secrets manager.
+
+## API endpoint summary
 
 ```
 GET  /api/health
@@ -64,29 +95,31 @@ GET  /api/books/popular?limit=
 GET  /api/books/{id}/similar?limit=
 GET  /api/genres
 GET  /api/books/by-genre?genre=&limit=
-POST /api/recommend       body: { book_ids, top_n?, alpha? }
+POST /api/recommend        body: { book_ids, top_n?, alpha? }
 ```
 
-## regenerating the data
+## Regenerating the recommendation model or genre data
 
-Only needed if you're changing the preprocessing logic — the committed
-CSVs already work as-is.
+Required only if the preprocessing logic itself is modified; the CSVs
+already committed to the repository are sufficient for a standard run.
 
-```
+```bash
 cd backend
 pip install -r requirements-build.txt
-python app/preprocess.py       # rebuilds the recommendation vectors
-python app/build_genres.py     # rebuilds the genre labels
+python app/preprocess.py       # rebuilds content_factors.npy and collab_factors.npy
+python app/build_genres.py     # rebuilds db/book_genres.csv
 ```
 
-then `docker compose down -v && docker compose up --build` to pick up the
-changes.
+After regenerating, apply the changes with:
+```bash
+docker compose down -v
+docker compose up --build
+```
 
-## if something's not working
+## Troubleshooting
 
-- port 3000 taken → change `"3000:80"` in docker-compose.yml to something
-  free
-- backend can't reach postgres on startup → it retries for a bit on its
-  own; if it's still failing after ~20s check `docker compose logs db`
-- old/wrong data showing up after you changed a seed file → you need
-  `docker compose down -v`, the tables only seed once
+| Symptom | Cause | Resolution |
+|---|---|---|
+| Port 3000 already in use | Another process is bound to port 3000 | Change `"3000:80"` under the `frontend` service in `docker-compose.yml` to an available port |
+| Backend fails to connect to the database at startup | The `db` container has not yet finished starting | The backend retries automatically for a short period; if it continues to fail after approximately 20 seconds, check `docker compose logs db` to confirm the container is healthy |
+| Genre or book data appears empty or outdated after a data change | The database volume still holds the previous seed data | Run `docker compose down -v` before rebuilding, since the seed script only executes on an empty volume |

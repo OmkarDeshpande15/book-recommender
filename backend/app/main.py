@@ -1,12 +1,12 @@
-"""FastAPI app for the book recommender.
+"""FastAPI application for the Book Recommendation System.
 
-Routes:
-  GET  /api/books/search       - search by title/author
-  GET  /api/books/popular      - starter list for the empty state
-  GET  /api/books/{id}/similar - books similar to one specific book
-  GET  /api/genres             - list of genres with book counts
-  GET  /api/books/by-genre     - books tagged with a given genre
-  POST /api/recommend          - the taste-profile matching endpoint
+Defines the following routes:
+  GET  /api/health              - liveness and database-connectivity check
+  GET  /api/books/search        - search books by title or author
+  GET  /api/books/popular       - highest rated-count books (default landing state)
+  GET  /api/books/{id}/similar  - recommendations generated from a single book
+  GET  /api/genres              - list of available genres with book counts
+  POST /api/recommend           - taste-profile recommendations from multiple books
 """
 
 from __future__ import annotations

@@ -69,8 +69,8 @@ export default function App() {
   return (
     <div className="page">
       <header className="hero">
-        <p className="hero__eyebrow">A matching service for readers</p>
-        <h1 className="hero__title">Book Matcher</h1>
+        <p className="hero__eyebrow">A book recommendation service</p>
+        <h1 className="hero__title">Book Recommendation System</h1>
         <p className="hero__subtitle">
           Tell us a few books you've loved. We'll read the room — genres, tone, the
           company they keep on other people's shelves — and hand you what's next.

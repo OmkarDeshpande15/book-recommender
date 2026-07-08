@@ -3,22 +3,22 @@ services:
     build:
       context: ./db
       dockerfile: Dockerfile
-    container_name: bookmatcher-db
+    container_name: bookrecsys-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: bookmatcher
-      POSTGRES_USER: bookmatcher
-      POSTGRES_PASSWORD: bookmatcher
+      POSTGRES_DB: bookrecsys
+      POSTGRES_USER: bookrecsys
+      POSTGRES_PASSWORD: bookrecsys
     volumes:
-      - bookmatcher-db-data:/var/lib/postgresql/data
+      - bookrecsys-db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U bookmatcher -d bookmatcher"]
+      test: ["CMD-SHELL", "pg_isready -U bookrecsys -d bookrecsys"]
       interval: 5s
       timeout: 5s
       retries: 10
       start_period: 5s
     networks:
-      - bookmatcher-net
+      - bookrecsys-net
     # ports:
     #   - "5432:5432"
 
@@ -26,15 +26,15 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: bookmatcher-backend
+    container_name: bookrecsys-backend
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://bookmatcher:bookmatcher@db:5432/bookmatcher
+      DATABASE_URL: postgresql://bookrecsys:bookrecsys@db:5432/bookrecsys
     depends_on:
       db:
         condition: service_healthy
     networks:
-      - bookmatcher-net
+      - bookrecsys-net
     # ports:
     #   - "8000:8000"
 
@@ -42,18 +42,18 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: bookmatcher-frontend
+    container_name: bookrecsys-frontend
     restart: unless-stopped
     depends_on:
       - backend
     ports:
       - "3000:80"
     networks:
-      - bookmatcher-net
+      - bookrecsys-net
 
 networks:
-  bookmatcher-net:
+  bookrecsys-net:
     driver: bridge
 
 volumes:
-  bookmatcher-db-data:
+  bookrecsys-db-data:

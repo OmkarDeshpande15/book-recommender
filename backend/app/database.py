@@ -1,7 +1,8 @@
-"""Talks to the Postgres container for book metadata.
+"""PostgreSQL access layer for book metadata and genre lookups.
 
-Everything here is read-only (the data gets seeded once by db/init.sql),
-so plain psycopg2 + a small connection pool is enough, no ORM.
+The data is read-only from the API's perspective (it is populated once,
+at container startup, by db/init.sql), so a small connection pool with
+plain psycopg2 is used rather than an ORM.
 """
 
 from __future__ import annotations
@@ -16,7 +17,7 @@ import psycopg2.extras
 from psycopg2 import pool
 
 DATABASE_URL = os.environ.get(
-    "DATABASE_URL", "postgresql://bookmatcher:bookmatcher@db:5432/bookmatcher"
+    "DATABASE_URL", "postgresql://bookrecsys:bookrecsys@db:5432/bookrecsys"
 )
 
 _COLUMNS = (
