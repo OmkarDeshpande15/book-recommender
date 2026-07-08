@@ -9,7 +9,7 @@
 | Data | goodbooks-10k — 10,000 books, ~6,000,000 ratings |
 | Run it | `docker compose up --build`, then open `http://localhost:3000` (see Section 5–6) |
 
-**Contents**
+##Contents
 
 - [1. Project classification](#1-project-classification)
 - [2. Why this project, and what is special about it](#2-why-this-project-and-what-is-special-about-it)
