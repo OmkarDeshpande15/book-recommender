@@ -107,8 +107,8 @@ What distinguishes this submission from a minimal implementation:
                         │  seeded automatically on first boot  │
                         └──────────────────────────────────────┘
 
-        All three containers share the custom bridge network
-                        "book-recommendation-system-net".
+     All three containers share the custom bridge network
+                      "nextread-net".
 ```
 
 The frontend and backend are separated into independent containers and
