@@ -17,7 +17,7 @@ import psycopg2.extras
 from psycopg2 import pool
 
 DATABASE_URL = os.environ.get(
-    "DATABASE_URL", "postgresql://bookrecsys:bookrecsys@db:5432/bookrecsys"
+    "DATABASE_URL", "postgresql://nextread:nextread@db:5432/nextread"
 )
 
 _COLUMNS = (

@@ -76,8 +76,8 @@ containers. Once exposed:
 
 - Backend API: `http://localhost:8000`
 - Interactive API documentation (Swagger UI): `http://localhost:8000/api/docs`
-- PostgreSQL: connect with `psql -h localhost -U bookrecsys -d bookrecsys`
-  (password: `bookrecsys`)
+- PostgreSQL: connect with `psql -h localhost -U nextread -d nextread`
+  (password: `nextread`)
 
 The database credentials are defined directly in `docker-compose.yml`
 rather than in a separate secrets file. This is appropriate for this

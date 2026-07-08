@@ -1,4 +1,4 @@
-# Book Recommendation System
+# NextRead
 
 A recommendation-service submission for the Matching / Recommendation Service
 project round (deadline: 8 July 2026).

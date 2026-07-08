@@ -1,4 +1,4 @@
-"""FastAPI application for the Book Recommendation System.
+"""FastAPI application for the NextRead.
 
 Defines the following routes:
   GET  /api/health              - liveness and database-connectivity check

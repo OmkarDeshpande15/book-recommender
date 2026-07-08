@@ -3,22 +3,22 @@ services:
     build:
       context: ./db
       dockerfile: Dockerfile
-    container_name: bookrecsys-db
+    container_name: nextread-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: bookrecsys
-      POSTGRES_USER: bookrecsys
-      POSTGRES_PASSWORD: bookrecsys
+      POSTGRES_DB: nextread
+      POSTGRES_USER: nextread
+      POSTGRES_PASSWORD: nextread
     volumes:
-      - bookrecsys-db-data:/var/lib/postgresql/data
+      - nextread-db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U bookrecsys -d bookrecsys"]
+      test: ["CMD-SHELL", "pg_isready -U nextread -d nextread"]
       interval: 5s
       timeout: 5s
       retries: 10
       start_period: 5s
     networks:
-      - bookrecsys-net
+      - nextread-net
     # ports:
     #   - "5432:5432"
 
@@ -26,15 +26,15 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: bookrecsys-backend
+    container_name: nextread-backend
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://bookrecsys:bookrecsys@db:5432/bookrecsys
+      DATABASE_URL: postgresql://nextread:nextread@db:5432/nextread
     depends_on:
       db:
         condition: service_healthy
     networks:
-      - bookrecsys-net
+      - nextread-net
     # ports:
     #   - "8000:8000"
 
@@ -42,18 +42,18 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: bookrecsys-frontend
+    container_name: nextread-frontend
     restart: unless-stopped
     depends_on:
       - backend
     ports:
       - "3000:80"
     networks:
-      - bookrecsys-net
+      - nextread-net
 
 networks:
-  bookrecsys-net:
+  nextread-net:
     driver: bridge
 
 volumes:
-  bookrecsys-db-data:
+  nextread-db-data:
