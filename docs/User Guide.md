@@ -1,4 +1,4 @@
-# Usage Guide
+# User Guide
 
 This document explains how to use the application once it is running.
 For installation instructions, see [SETUP.md](SETUP.md). For an
