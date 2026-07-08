@@ -23,7 +23,6 @@
 - [10. Technical explanation of the recommendation logic](#10-technical-explanation-of-the-recommendation-logic)
 - [11. Project structure](#11-project-structure)
 - [12. Technology stack](#12-technology-stack)
-- [13. Statement of originality](#14-statement-of-originality)
 
 ## 1. Project classification
 
@@ -361,12 +360,4 @@ used, in accordance with the project brief.
 
 
 
-## 13. Statement of originality
 
-The recommendation engine, API design, database schema, data-preparation
-scripts, and frontend implementation are original work produced for this
-submission. The only external inputs are the declared dataset
-(goodbooks-10k) and standard open-source libraries (FastAPI, React,
-scikit-learn, and others listed in Section 12), used as tools rather than
-copied as source material. No third-party templates, sample projects, or
-code from other candidates were used.
