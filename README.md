@@ -23,8 +23,7 @@
 - [10. Technical explanation of the recommendation logic](#10-technical-explanation-of-the-recommendation-logic)
 - [11. Project structure](#11-project-structure)
 - [12. Technology stack](#12-technology-stack)
-- [13. Version control](#13-version-control)
-- [14. Statement of originality](#14-statement-of-originality)
+- [13. Statement of originality](#14-statement-of-originality)
 
 ## 1. Project classification
 
@@ -360,15 +359,9 @@ book-recommender/
 No JavaScript UI framework beyond React was used, and jQuery was not
 used, in accordance with the project brief.
 
-## 13. Version control
 
-Git has been used from the start of development, with the repository
-committed incrementally as each component was built (dataset and
-preprocessing, recommendation engine, database layer, API, frontend,
-containerization, documentation), rather than as a single upload at
-submission time.
 
-## 14. Statement of originality
+## 13. Statement of originality
 
 The recommendation engine, API design, database schema, data-preparation
 scripts, and frontend implementation are original work produced for this
