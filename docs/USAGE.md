@@ -44,7 +44,6 @@ Select a result from the dropdown to add it to "Your shelf," shown below
 the search bar. Up to 10 books can be added. Each book on the shelf is
 shown as a removable tag; select the "x" on any tag to remove it.
 
-*(screenshot: shelf with a few books added — see docs/screenshots/, to be added)*
 
 **Step 3 (optional) — Adjust the match-weight slider.**
 Below the shelf is a slider labeled with the current match style
