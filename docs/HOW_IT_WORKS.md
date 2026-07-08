@@ -1,48 +1,8 @@
 # How the Application Works
 
-Supplementary detail to the "How to use the application" and "Technical
-explanation" sections of the main README.
-
-## Usage walkthrough
-
-The application presents two modes, selected by the tabs beneath the
-search bar: **Taste match** and **Browse by genre**.
-
-### Taste-match mode
-
-**Example:** searching for and adding "The Hobbit" to the shelf, then
-selecting "Get recommendations" with the match-weight slider at its
-default (0.5) position, returns results including *The Fellowship of the
-Ring*, *The Lord of the Rings*, and other Tolkien and epic-fantasy
-titles, each with a match percentage.
-
-Moving the slider toward "same genre/tags" increases the weight given to
-the content-based model (tags, author, title similarity); moving it
-toward "same readers liked" increases the weight given to the
-collaborative-filtering model (rating-pattern similarity). This directly
-controls the `alpha` parameter described in the README's technical
-section.
-
-Match percentages are relative to the other results within the same
-response, not an absolute quality measure — a 95% match in one request
-and a 95% match in a different request are not directly comparable to
-each other.
-
-### Genre-browse mode
-
-Selecting a genre chip (for example, "Mystery") queries the database
-directly for the highest-rated-count books carrying that genre label, and
-displays them without requiring the user to select any books first. This
-mode does not use the recommendation model at all — see "Genre browsing"
-below.
-
-### Single-book recommendations
-
-The "more like this" button, present on every result card regardless of
-mode, calls the same recommendation logic used for taste-match mode, but
-with a single book as the input rather than an entire shelf. The result
-is standard item-to-item similarity: recommendations based on that one
-book's own content and collaborative-filtering vectors.
+Technical explanation of the recommendation logic, data layer, and code
+structure. For step-by-step usage instructions, see
+[USAGE.md](USAGE.md). For installation, see [SETUP.md](SETUP.md).
 
 ## Data layer
 
