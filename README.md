@@ -201,9 +201,6 @@ available, selected via the tabs beneath the search bar.
   generated from that one book specifically. Select "back" to return to
   the previous view.
 
-A full usage walkthrough, including a screenshot-referenced step-by-step
-guide for every control in the interface, is in
-[docs/USAGE.md](docs/USAGE.md).
 
 ## 8. API reference
 
