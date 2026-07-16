@@ -310,9 +310,10 @@ book-recommender/
 ├── docker-compose.yml
 ├── README.md
 ├── docs/
-│   ├── SETUP.md
-│   ├── USAGE.md
-│   └── HOW_IT_WORKS.md
+│   ├── How_It_Works.md
+│   ├── Installation_Guide.md
+│   ├── NextRead_Screenshot_Walkthrough.pdf
+│   ├── User Manual.md
 ├── db/
 │   ├── Dockerfile
 │   ├── init.sql
