@@ -2,7 +2,7 @@
 
 Technical explanation of the recommendation logic, data layer, and code
 structure. For step-by-step usage instructions, see
-[User Manual.md](UserManual.md). For installation, see [Installation_Guide.md](Installation_Guide.md).
+[User_Manual.md](User_Manual.md). For installation, see [Installation_Guide.md](Installation_Guide.md).
 
 ## Data layer
 
