@@ -84,7 +84,7 @@ What distinguishes this submission from a minimal implementation:
 | Search | Debounced, case-insensitive search by title or author |
 
 A full usage walkthrough with screenshots for every control is in
-[docs/User Manual.md](docs/User%20Manual.md), including a supplementary
+[docs/User Manual.md](docs/User_20Manual.md), including a supplementary
 visual PDF: [docs/NextRead_Screenshot_Walkthrough.pdf](docs/NextRead_Screenshot_Walkthrough.pdf).
 
 ## 4. Architecture
@@ -213,7 +213,7 @@ available, selected via the tabs beneath the search bar.
 
 A full usage walkthrough, including a screenshot-referenced step-by-step
 guide for every control in the interface, is in
-[docs/User Manual.md](docs/User%20Manual.md).
+[docs/User Manual.md](docs/User_20Manual.md).
 
 ## 8. API reference
 
@@ -318,7 +318,7 @@ book-recommender/
 ├── README.md
 ├── docs/
 │   ├── Installation_Guide.md
-│   ├── User Manual.md
+│   ├── User_Manual.md
 │   ├── HOW_IT_WORKS.md
 │   └── NextRead_Screenshot_Walkthrough.pdf
 ├── db/
