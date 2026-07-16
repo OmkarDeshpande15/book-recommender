@@ -369,9 +369,9 @@ book-recommender/
 No JavaScript UI framework beyond React was used, and jQuery was not
 used, in accordance with the project brief.
 
-## 13. AI Assistance Declaration
+## 13. Declarations
 
-This project was built with the help of an AI coding assistant (Claude),
+1.This project was built with the help of an AI coding assistant (Claude),
 used to move faster on implementation while the architecture, technology
 choices, and their tradeoffs stayed with me.
 
@@ -383,3 +383,5 @@ Approximate share of AI assistance by area:
 | Backend | API routes, recommendation logic, database layer | ~40% |
 | Docker / infrastructure | Dockerfiles, compose configuration, nginx | ~10% |
 
+2.This project has also been verified to run successfully on macOS (see
+Section 5, "Prerequisites"), in addition to Windows.
