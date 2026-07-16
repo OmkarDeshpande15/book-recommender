@@ -3,7 +3,7 @@
 This document explains how to use the application once it is running.
 For installation instructions, see [Installation_Guide.md](Installation_Guide.md). For an
 explanation of how the recommendation logic works internally, see
-[HOW_IT_WORKS.md](HOW_IT_WORKS.md).
+[HOW_IT_WORKS.md](How_It_Works.md).
 
 A detailed visual walkthrough with explanations for every screenshot is
 also available as a standalone PDF:
