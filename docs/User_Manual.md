@@ -5,6 +5,10 @@ For installation instructions, see [Installation_Guide.md](Installation_Guide.md
 explanation of how the recommendation logic works internally, see
 [HOW_IT_WORKS.md](HOW_IT_WORKS.md).
 
+A detailed visual walkthrough with explanations for every screenshot is
+also available as a standalone PDF:
+[NextRead_Screenshot_Walkthrough.pdf](NextRead_Screenshot_Walkthrough.pdf).
+
 ## Before you start
 
 The application must be running first:
@@ -26,8 +30,6 @@ The landing page has three parts:
 2. Two mode tabs beneath the search bar: **Taste match** and
    **Browse by genre**.
 3. A results area below, which changes depending on the selected mode.
-
-*(screenshot: landing page — see docs/screenshots/, to be added)*
 
 ## Using Taste Match mode
 
