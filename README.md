@@ -23,6 +23,7 @@
 - [10. Technical explanation of the recommendation logic](#10-technical-explanation-of-the-recommendation-logic)
 - [11. Project structure](#11-project-structure)
 - [12. Technology stack](#12-technology-stack)
+- [13. AI Assistance Declaration](#13-ai-assistance-declaration)
 
 ## 1. Project classification
 
@@ -61,7 +62,7 @@ What distinguishes this submission from a minimal implementation:
   Users who do not wish to select books first can browse by one of
   twenty curated genre categories, extracted from approximately 22,800
   raw tag records that were otherwise mostly non-genre noise (see Section
-  6, "Data preparation").
+  9, "Data source and preparation").
 - **Single-item recommendations ("more like this").** In addition to
   recommending from a multi-book profile, any individual book can be used
   as the sole basis for a recommendation request, which is useful when a
@@ -82,6 +83,9 @@ What distinguishes this submission from a minimal implementation:
 | Genre browsing | Browse the highest-rated books within any of 20 curated genre categories, without requiring prior book selection |
 | Search | Debounced, case-insensitive search by title or author |
 
+A full usage walkthrough with screenshots for every control is in
+[docs/User Manual.md](docs/User%20Manual.md), including a supplementary
+visual PDF: [docs/NextRead_Screenshot_Walkthrough.pdf](docs/NextRead_Screenshot_Walkthrough.pdf).
 
 ## 4. Architecture
 
@@ -134,6 +138,8 @@ To verify the prerequisites are met:
 docker --version
 docker compose version
 ```
+
+Both commands should return a version number without error.
 
 **Platform testing:** this project has been verified to build and run
 successfully via `docker compose up --build` on both Windows (primary
@@ -205,6 +211,9 @@ available, selected via the tabs beneath the search bar.
   generated from that one book specifically. Select "back" to return to
   the previous view.
 
+A full usage walkthrough, including a screenshot-referenced step-by-step
+guide for every control in the interface, is in
+[docs/User Manual.md](docs/User%20Manual.md).
 
 ## 8. API reference
 
@@ -308,10 +317,10 @@ book-recommender/
 ├── docker-compose.yml
 ├── README.md
 ├── docs/
-│   ├── How_It_Works.md
 │   ├── Installation_Guide.md
-│   ├── NextRead_Screenshot_Walkthrough.pdf
 │   ├── User Manual.md
+│   ├── HOW_IT_WORKS.md
+│   └── NextRead_Screenshot_Walkthrough.pdf
 ├── db/
 │   ├── Dockerfile
 │   ├── init.sql
@@ -360,6 +369,29 @@ book-recommender/
 No JavaScript UI framework beyond React was used, and jQuery was not
 used, in accordance with the project brief.
 
+## 13. AI Assistance Declaration
 
+This project was built with the help of an AI coding assistant (Claude),
+used to move faster on implementation while the architecture, technology
+choices, and their tradeoffs stayed with me.
 
+I own the engineering decisions: the hybrid recommendation approach
+(content-based tag similarity blended with collaborative filtering from
+reader ratings, rather than either alone), the choice to containerize
+the database separately over an embedded file, and the genre-mapping
+approach after finding the raw dataset tags were mostly unusable noise.
+I tested the running application myself throughout development and
+identified and resolved real issues — for example, a bug where genre
+browsing failed silently due to a stale Docker volume.
 
+Approximate share of AI assistance by area:
+
+| Area | Used for | AI assistance |
+|---|---|---|
+| Frontend | Component implementation, styling, layout | ~90% |
+| Backend | API routes, recommendation logic, database layer | ~90% |
+| Docker / infrastructure | Dockerfiles, compose configuration, nginx | ~90% |
+
+My contribution across all three areas was direction, architecture
+decisions, testing, debugging, and ensuring I understand the codebase
+well enough to explain and justify any part of it.
