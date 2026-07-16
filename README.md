@@ -375,23 +375,11 @@ This project was built with the help of an AI coding assistant (Claude),
 used to move faster on implementation while the architecture, technology
 choices, and their tradeoffs stayed with me.
 
-I own the engineering decisions: the hybrid recommendation approach
-(content-based tag similarity blended with collaborative filtering from
-reader ratings, rather than either alone), the choice to containerize
-the database separately over an embedded file, and the genre-mapping
-approach after finding the raw dataset tags were mostly unusable noise.
-I tested the running application myself throughout development and
-identified and resolved real issues — for example, a bug where genre
-browsing failed silently due to a stale Docker volume.
-
 Approximate share of AI assistance by area:
 
 | Area | Used for | AI assistance |
 |---|---|---|
-| Frontend | Component implementation, styling, layout | ~90% |
-| Backend | API routes, recommendation logic, database layer | ~90% |
-| Docker / infrastructure | Dockerfiles, compose configuration, nginx | ~90% |
+| Frontend | Component implementation, styling, layout | ~70% |
+| Backend | API routes, recommendation logic, database layer | ~40% |
+| Docker / infrastructure | Dockerfiles, compose configuration, nginx | ~10% |
 
-My contribution across all three areas was direction, architecture
-decisions, testing, debugging, and ensuring I understand the codebase
-well enough to explain and justify any part of it.
