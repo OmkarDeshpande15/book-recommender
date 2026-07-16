@@ -23,7 +23,7 @@
 - [10. Technical explanation of the recommendation logic](#10-technical-explanation-of-the-recommendation-logic)
 - [11. Project structure](#11-project-structure)
 - [12. Technology stack](#12-technology-stack)
-- [13. AI Assistance Declaration](#13-ai-assistance-declaration)
+- [13. Declarations](#13-Declarations)
 
 ## 1. Project classification
 
