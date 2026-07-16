@@ -180,7 +180,7 @@ docker compose down -v
 
 Further setup detail, including how to expose the backend/database ports
 directly for debugging and how to regenerate the model artifacts, is in
-[docs/SETUP.md](docs/SETUP.md).
+[docs/Installation_Guide.md](docs/Installation_Guide.md).
 
 ## 7. How to use the application
 
@@ -222,7 +222,7 @@ available, selected via the tabs beneath the search bar.
 
 Interactive API documentation (Swagger UI) is available at
 `/api/docs` on the backend once the backend port has been exposed (see
-"exposing ports for debugging" in [docs/SETUP.md](docs/SETUP.md)).
+"exposing ports for debugging" in [docs/Installation_Guide.md](docs/Installation_Guide.md)).
 
 ## 9. Data source and preparation
 
