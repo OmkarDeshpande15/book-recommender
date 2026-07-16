@@ -308,7 +308,7 @@ against the `book_genres` table, ordered by rating count, since genre
 membership is categorical rather than similarity-based.
 
 A complete line-by-line explanation is in
-[docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md).
+[docs/HOW_IT_WORKS.md](docs/How_It_Works.md).
 
 ## 11. Project structure
 
@@ -319,7 +319,7 @@ book-recommender/
 ├── docs/
 │   ├── Installation_Guide.md
 │   ├── User_Manual.md
-│   ├── HOW_IT_WORKS.md
+│   ├── How_It_Works.md
 │   └── NextRead_Screenshot_Walkthrough.pdf
 ├── db/
 │   ├── Dockerfile
