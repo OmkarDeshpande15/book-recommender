@@ -135,6 +135,12 @@ docker --version
 docker compose version
 ```
 
+**Platform testing:** this project has been verified to build and run
+successfully via `docker compose up --build` on both Windows (primary
+development machine) and macOS (tested on a separate machine via a clean
+`git clone` of this repository). No platform-specific issues were
+encountered on either system.
+
 ## 6. Installation and setup
 
 1. Clone the repository:
